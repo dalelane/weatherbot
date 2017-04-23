@@ -34,6 +34,12 @@ The script sets the arm and LED once.
 
 We're using `cron` to run the script every 5 minutes, so the weatherbot keeps up to date with the latest forecast.
 
+## Can I use this?
+
+Sure. 
+
+But the config is scattered through the code, sorry. You'll need to sort yourself out with a [DarkSky API key](https://darksky.net/dev/) and put it in [an environment variable](https://github.com/dalelane/weatherbot/blob/ea6d482cdc629531a87ab0a36e0c07464248b2b2/weather.js#L25). You'll also need to modify the script to [specify the location you want forecasts for](https://github.com/dalelane/weatherbot/blob/ea6d482cdc629531a87ab0a36e0c07464248b2b2/bot.js#L39-L41). 
+
 ## Erm... isn't this a bit simple?
 
 Yes. The TJBot was [built by my kids](https://twitter.com/dalelane/status/852942709698560000) and this is their first project. 
