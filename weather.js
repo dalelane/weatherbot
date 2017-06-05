@@ -5,7 +5,7 @@ function requestWeatherInfo (apiKey, lat, lon) {
         uri : 'https://api.darksky.net/forecast/' + apiKey + '/' + lat + ',' + lon,
         method : 'GET',
         qs : {
-            exclude : 'currently,minutely,hourly,flags',
+            exclude : 'currently,minutely,daily,flags',
             units : 'si'
         },
         json : true
@@ -13,11 +13,25 @@ function requestWeatherInfo (apiKey, lat, lon) {
 }
 
 function parseWeatherInfo (info) {
-    var nextPrediction = info.daily.data[0];
+    var highestRainChance = 0;
+    var highestTemperature = Number.NEGATIVE_INFINITY;
+
+    var hoursLeftInDay = 24 - (new Date()).getHours();
+    var hourlyPredictions = Math.min(hoursLeftInDay, info.hourly.data.length);
+
+    for (var i = 0; i < hourlyPredictions; i++) {
+        var hourlyPrediction = info.hourly.data[i];
+
+        var chanceOfRain = Math.round(hourlyPrediction.precipProbability * 100);
+        highestRainChance = Math.max(highestRainChance, chanceOfRain);
+
+        highestTemperature = Math.max(hourlyPrediction.apparentTemperature, highestTemperature);
+    }
+
     return {
-        summary : nextPrediction.summary,
-        temperature : nextPrediction.apparentTemperatureMax,
-        chanceOfRain : Math.round(nextPrediction.precipProbability * 100)
+        summary : info.hourly.summary,
+        temperature : highestTemperature,
+        chanceOfRain : highestRainChance
     };
 }
 
